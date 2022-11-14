@@ -1,16 +1,17 @@
 # module imports
 import os
-from os.path import isfile, join
+from os.path import isfile
+from os.path import join
+from typing import Tuple
 from tkinter import Tk
 from tkinter.filedialog import askdirectory
-
 import tarfile
-import numpy as np
 
+import numpy as np
 import rasterio
 
-def int_to_binary(int_value):
-    '''
+def int_to_binary(int_value: int) -> str:
+    ''' Converts an integer into its binary equivalent.
 
     Parameters
     ----------
@@ -27,8 +28,8 @@ def int_to_binary(int_value):
     bin_value  =  "{0:b}".format(int_value)
     return bin_value
 
-def landsat8_collection2_qa_mask(img):
-    '''
+def landsat8_collection2_qa_mask(img: np.ndarray) -> np.ndarray:
+    ''' Landsat 8 cloud mask using the provided QA mask for Collection 2.
 
     Parameters
     ----------
@@ -66,8 +67,8 @@ def landsat8_collection2_qa_mask(img):
 
     return img
 
-def write_raster(raster,raster_ds,path,file_prefix, dst_landsat_folder):
-    '''
+def write_raster(raster: np.ndarray, raster_ds: rasterio.io.DatasetReader, path: str, file_prefix: str, dst_landsat_folder: str) -> int:
+    ''' Writes the raster data to a GeoTIFF file.
 
     Parameters
     ----------
@@ -112,8 +113,10 @@ def write_raster(raster,raster_ds,path,file_prefix, dst_landsat_folder):
         success+= 1
     return success
 
-def create_cloud_mask(src_landsat_folder, dst_landsat_folder):
-    '''
+def create_cloud_mask(src_landsat_folder: str, dst_landsat_folder: str) -> Tuple[int, int]:
+    ''' Creates a cloud mask from a given set of source files. Returns count of 
+    the number of successful and unsuccessful masks processed. Terminal shows which
+    specific files fail.
 
     Parameters
     ----------
